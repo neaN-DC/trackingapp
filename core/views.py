@@ -3,7 +3,7 @@ from django.http import HttpResponse
 # Create your views here.
 import requests
 from bs4 import BeautifulSoup
-from .models import Post
+from .models import UsersIds
 from .forms import HomeForm
 
 
@@ -17,9 +17,11 @@ def get_html_content(playerId):
 
 	return session.get('https://www.battlemetrics.com/players/'+ str(playerId))
 
+
+
 def home(request):
 
-	playerIds = Post.objects.all()
+	playerIds = UsersIds.objects.all()
 	playerList = []
 	for playerId in playerIds:
 		html_content = get_html_content(playerId)

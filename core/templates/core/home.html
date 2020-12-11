@@ -43,7 +43,8 @@
 <body>
 
 
-    <div class="main">      
+    <div class="main">
+            
         {% for player in playerslist %}
             <br>
             <h2>Player: {{ player.current_player }}</h1>   
@@ -51,8 +52,8 @@
             <h3>{{ player.last_seen_result }}</h3>
             <h2>Current server:</h2>
             <h3>{{ player.current_server_result }}</h3>
-        {% endfor %}
 
+        {% endfor %}
     
     </div>
 

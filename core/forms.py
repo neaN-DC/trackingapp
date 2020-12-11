@@ -1,7 +1,7 @@
 from django import forms
-from .models import Post
+from .models import UsersIds
 
 class HomeForm(forms.ModelForm):
 	class Meta:
-		model = Post
-		fields = ['player_id',]
+		model = UsersIds
+		fields = ['name','player_id', ]
