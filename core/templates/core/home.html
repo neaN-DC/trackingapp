@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tracking App</title>
+	    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+        }
+
+        .main {
+            text-align: left;
+            padding:20px;
+            width:500px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type='text'] {
+            width: 30%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid black;
+        }
+
+        input[type='submit'] {
+            width: 30%;
+            padding: 5px;
+            background: black;
+            color: white;
+            text-transform: uppercase;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="main">      
+        {% for player in playerslist %}
+            <br>
+            <h2>Player: {{ player.current_player }}</h1>   
+            <h2> Last seen:</h3>
+            <h3>{{ player.last_seen_result }}</h3>
+            <h2>Current server:</h2>
+            <h3>{{ player.current_server_result }}</h3>
+        {% endfor %}
+
+    
+    </div>
+
+</body>
+</html>
