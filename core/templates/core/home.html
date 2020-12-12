@@ -71,6 +71,17 @@
         }
 
     </style>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script>
+      function myFunction() {
+          $('#load').load(document.URL +  " #load");
+      }
+
+      var i = setInterval(function() { myFunction(); }, 60000);
+
+
+    </script>
+    
 </head>
 <body>
   <nav>
@@ -79,8 +90,8 @@
           <li><a href="saveid" class='signin'>Add Player</a></li>
       </ul>   
   </nav>
-  <div class = "container">
-    <h3 class="main">
+  <div class = "container" id = "load" >
+    <h3 class="main" >
       {% for player in playerslist %}
         <br>
         {% if player.current_server_result == "Not online" %}
@@ -89,15 +100,16 @@
           <div> Last seen:
           {{ player.last_seen_result }}</div>
             Current server:
-            <div id = "load">{{ player.current_server_result }}</div>
+            <div>{{ player.current_server_result }}</div>
         </div>
         {% else %}
           <div class = 'color'>
             <div>Player: {{ player.current_player }}</div>
+            <div>Name Given: {{ player.name }}</div>
             <div> Last seen:
             {{ player.last_seen_result }}</div>
             Current server:
-            <div id = "load">{{ player.current_server_result }}</div>
+            <div>{{ player.current_server_result }}</div>
           </div>
         {% endif %}
       {% endfor %}
