@@ -90,23 +90,27 @@
           <li><a href="saveid" class='signin'>Add Player</a></li>
       </ul>   
   </nav>
-  <div> API Test</div>
-  <h3>{{ player_list.playernameapi }}</h3>
-  {% if player_list.last_online == None %}
-    <h3> Status: Online </h3>
-  {% else %}
-    <h3> Status: Offline </h3>
-  {% endif %}
 
-  {% for player in playersList %}
-      <div class = 'color'>
-        <div>Player: {{ player.playernameapi }}</div>
-        <div>Name Given: {{ player.name }}</div>
-        Current server:
-        <div>{{ player.last_online }}</div>
-      </div>
-  {% endfor %}
-
+  <div class = "container" id = "load" >
+    <h3 class="main" >
+      {% for player in playersList %}
+        <br>
+        {% if player.last_online == None %}
+          <div class = 'color'>
+            <div>Player: {{ player.playernameapi }}</div>
+            <div>Name Given: {{ player.name }}</div>
+            <div>Status: Online</div>
+          </div>
+        {% else %}
+          <div>
+            <div>Player: {{ player.playernameapi }}</div>
+            <div>Name Given: {{ player.name }}</div>
+            <div>Status: Offline</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </h3>
+  </div>
 
 
 

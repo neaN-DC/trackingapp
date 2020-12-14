@@ -44,26 +44,14 @@ def home(request):
 
 
 
-def get_html_contents(playerIdq):
-	USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
-	LANGUAGE = "en-US,en;q=0.5"
-	session = requests.Session()
-	session.headers['User-Agent'] = USER_AGENT
-	session.headers['Accept-Language'] = LANGUAGE
-	session.headers['Content-Language'] = LANGUAGE
-
-	return session.get('https://api.battlemetrics.com/players/'+ str(playerIdq) + '/relationships/sessions')
-
-
 
 def index(request):
+
 	playerIds = UsersIds.objects.all()
 	playerList = []
 
-
 	for playerIdq in playerIds:
-		html_content = get_html_content(playerIdq)
-		url = 'https://api.battlemetrics.com/players/'+ str(playerIdq) + '/relationships/sessions'
+		url = 'https://api.battlemetrics.com/players/'+ str(playerIdq) +'/relationships/sessions'
 		r = requests.get(url).json()
 		player_list = {
 			'last_online': r["data"][0]["attributes"]["stop"],
