@@ -41,8 +41,6 @@ def home(request):
 		playerList.append(tempdict)
 
 
-
-
 	steamids = SteamId.objects.all()
 	playerSteamidList = []
 	for playersid in steamids:
