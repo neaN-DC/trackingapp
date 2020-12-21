@@ -4,6 +4,7 @@ from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
 from .models import UsersIds
+from .models import SteamId
 from .forms import HomeForm
 
 
@@ -23,6 +24,9 @@ def home(request):
 
 	playerIds = UsersIds.objects.all()
 	playerList = []
+
+
+
 	for playerId in playerIds:
 		html_content = get_html_content(playerId)
 		soup = BeautifulSoup(html_content.text, 'html.parser')
@@ -32,15 +36,37 @@ def home(request):
 
 		tempdict = { 'current_player' : current_player,
 		            'last_seen_result' : last_seen_result,
-		            'current_server_result' : current_server_result
+		            'current_server_result' : current_server_result,
 		             }
 		playerList.append(tempdict)
-	return render(request, 'core/home.html', {'playerslist': playerList})
 
 
 
 
+	steamids = SteamId.objects.all()
+	playerSteamidList = []
+	for playersid in steamids:
 
+		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=948ADFC5AA39BFA48B536A316B0A333E&steamids='+ str(playersid)
+		r = requests.get(url).json()
+
+		try:
+			playerSteam_list = {
+				'playernameapi': r["response"]["players"][0]["personastate"],
+				'playerGame':  r["response"]["players"][0]["gameextrainfo"], 
+			}
+		except:
+			playerSteam_list = {
+				'playernameapi': r["response"]["players"][0]["personastate"],
+				'playerGame': "Not Playing", 
+			}
+
+		playerSteamidList.append(playerSteam_list)
+
+		print (playerSteamidList)
+	
+
+	return render(request, 'core/home.html', {'playerSteamidList': playerSteamidList,'playerList': playerList , 'playerIds': playerIds})
 
 
 
@@ -49,8 +75,8 @@ def index(request):
 
 	playerIds = UsersIds.objects.all()
 	playerList = []
-
 	for playerIdq in playerIds:
+
 		url = 'https://api.battlemetrics.com/players/'+ str(playerIdq) +'/relationships/sessions'
 		r = requests.get(url).json()
 		player_list = {
@@ -59,11 +85,10 @@ def index(request):
 
 		}
 		playerList.append(player_list)
+
 	
 
-	return render(request, 'core/home.html', {'playersList': playerList})
-
-
+	return render(request, 'core/playerid.html', {'playersList': playerList,})
 
 
 

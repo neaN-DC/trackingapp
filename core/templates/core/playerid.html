@@ -93,13 +93,37 @@
 	    </ul>   
 	</nav>
 	<div>
-		<form method = 'POST'>
-		    {% csrf_token %}
+    <div class = "container" id = "load" >
+      <h3 class="main" >
 
-		    {{ form.as_p}}
 
-		    <input type="submit" value="Submit"/>
 
-		</form>		
+        {% for player in playersList %}
+          <br>
+          {% if player.last_online == None %}
+            <div class = 'color'>
+              <div>Player: {{ player.playernameapi }}</div>
+              <div>Name Given: {{ player.username }}</div>
+
+              <div>Status: Online</div>
+            </div>
+          {% else %}
+            <div>
+              <div>Player: {{ player.playernameapi }}</div>
+              <div>Name Given: {{ player.username }}</div>
+              <div>Status: Offline</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </h3>
+    </div>
+  		<form method = 'POST'>
+  		    {% csrf_token %}
+
+  		    {{ form.as_p}}
+
+  		    <input type="submit" value="Submit"/>
+
+  		</form>		
 	</div>
 </body>

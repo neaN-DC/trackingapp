@@ -93,51 +93,31 @@
 
   <div class = "container" id = "load" >
     <h3 class="main" >
-      {% for player in playersList %}
+      {% for playersteam in playerSteamidList %}
+        {% for player in playerList %}
         <br>
-        {% if player.last_online == None %}
-          <div class = 'color'>
-            <div>Player: {{ player.playernameapi }}</div>
-            <div>Name Given: {{ player.name }}</div>
-            <div>Status: Online</div>
-          </div>
-        {% else %}
+          {% if player.current_server_result == "Not online" %}
           <div>
-            <div>Player: {{ player.playernameapi }}</div>
-            <div>Name Given: {{ player.name }}</div>
-            <div>Status: Offline</div>
-          </div>
-        {% endif %}
-      {% endfor %}
-    </h3>
-  </div>
-
-
-
-
-  <div class = "container" id = "load" >
-    <h3 class="main" >
-      {% for player in playerslist %}
-        <br>
-        {% if player.current_server_result == "Not online" %}
-        <div>
-          <div>Player: {{ player.current_player }}  </div>
-          <div> Last seen:
-          {{ player.last_seen_result }}</div>
-            Current server:
-            <div>{{ player.current_server_result }}</div>
-        </div>
-        {% else %}
-
-          <div class = 'color'>
             <div>Player: {{ player.current_player }}</div>
-            <div>Name Given: {{ player.name }}</div>
+            <div>Name Given: {{ player.playersNameGive }}</div>
+            <div>Steam status: {{ playersteam.playerGame }}</div>
             <div> Last seen:
             {{ player.last_seen_result }}</div>
-            Current server:
-            <div>{{ player.current_server_result }}</div>
+              Current server:
+              <div>{{ player.current_server_result }}</div>
           </div>
-        {% endif %}
+          {% else %}
+
+            <div class = 'color' id = "playerOnline">
+              <div>Player: {{ player.current_player }}</div>
+              <div>Name Given: {{ player.player_name }}</div>
+              <div> Last seen:
+              {{ player.last_seen_result }}</div>
+              Current server:
+              <div>{{ player.current_server_result }}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
       {% endfor %}
     </h3>
   </div>
