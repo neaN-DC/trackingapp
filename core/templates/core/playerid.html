@@ -96,7 +96,11 @@
     <div class = "container" id = "load" >
       <h3 class="main" >
 
+        {% for players in playerSteamidList %}
+          {{ players.playernameapi }}
+          {{ players.playerGame }}
 
+        {% endfor %}      
 
         {% for player in playersList %}
           <br>

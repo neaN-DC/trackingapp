@@ -84,9 +84,33 @@ def index(request):
 		}
 		playerList.append(player_list)
 
+
+
+	steamids = SteamId.objects.all()
+	playerSteamidList = []
+	for playersid in steamids:
+
+		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=948ADFC5AA39BFA48B536A316B0A333E&steamids='+ str(playersid)
+		r = requests.get(url).json()
+
+		try:
+			playerSteam_list = {
+				'playernameapi': r["response"]["players"][0]["personastate"],
+				'playerGame':  r["response"]["players"][0]["gameextrainfo"], 
+			}
+		except:
+			playerSteam_list = {
+				'playernameapi': r["response"]["players"][0]["personastate"],
+				'playerGame': "Not Playing", 
+			}
+
+		playerSteamidList.append(playerSteam_list)
+
+		print (playerSteamidList)
+	
 	
 
-	return render(request, 'core/playerid.html', {'playersList': playerList,})
+	return render(request, 'core/playerid.html', {'playerSteam_list': playerSteam_list, 'playersList': playerList,})
 
 
 
