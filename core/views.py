@@ -3,8 +3,9 @@ from django.http import HttpResponse
 # Create your views here.
 import requests
 from bs4 import BeautifulSoup
-from .models import UsersIds
-from .models import SteamId
+from .models import UsersId
+
+
 from .forms import HomeForm
 
 
@@ -16,66 +17,59 @@ def get_html_content(playerId):
 	session.headers['Accept-Language'] = LANGUAGE
 	session.headers['Content-Language'] = LANGUAGE
 
-	return session.get('https://www.battlemetrics.com/players/'+ str(playerId))
+	return session.get('https://www.battlemetrics.com/players/'+ str(playerId.player_id))
 
 
 
 def home(request):
 
-	playerIds = UsersIds.objects.all()
+	playerIds = UsersId.objects.all()
 	playerList = []
 
 
 
 	for playerId in playerIds:
+		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
+		r = requests.get(url).json()
 		html_content = get_html_content(playerId)
 		soup = BeautifulSoup(html_content.text, 'html.parser')
 		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
-
-		tempdict = { 'current_player' : current_player,
-		            'last_seen_result' : last_seen_result,
-		            'current_server_result' : current_server_result,
-		             }
-		playerList.append(tempdict)
-
-
-	steamids = SteamId.objects.all()
-	playerSteamidList = []
-	for playersid in steamids:
-
-		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=948ADFC5AA39BFA48B536A316B0A333E&steamids='+ str(playersid)
-		r = requests.get(url).json()
-
 		try:
 			playerSteam_list = {
-				'playernameapi': r["response"]["players"][0]["personastate"],
-				'playerGame':  r["response"]["players"][0]["gameextrainfo"], 
+				'player_steam_status': r["response"]["players"][0]["personastate"],
+				'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
+				'current_player' : current_player,
+	            'last_seen_result' : last_seen_result,
+	            'current_server_result' : current_server_result,
+	            'players_name_given': playerId.players_name_given,
 			}
 		except:
 			playerSteam_list = {
-				'playernameapi': r["response"]["players"][0]["personastate"],
-				'playerGame': "Not Playing", 
+				'player_steam_status': "Private Profile",
+				'player_game_status': "Not Playing", 
+				'current_player' : current_player,
+	            'last_seen_result' : last_seen_result,
+	            'current_server_result' : current_server_result,
+	            'players_name_given': playerId.players_name_given,
 			}
+		print(playerSteam_list)
+		playerList.append(playerSteam_list)
 
-		playerSteamidList.append(playerSteam_list)
 
-		print (playerSteamidList)
-	
-
-	return render(request, 'core/home.html', {'playerSteamidList': playerSteamidList,'playerList': playerList , 'playerIds': playerIds})
+	return render(request, 'core/home.html', {'playerList': playerList})
 
 
 
 
 def index(request):
 
-	playerIds = UsersIds.objects.all()
+	playerIds = UsersId.objects.all()
 	playerList = []
 	for playerIdq in playerIds:
 
-		url = 'https://api.battlemetrics.com/players/'+ str(playerIdq) +'/relationships/sessions'
+		url = 'https://api.battlemetrics.com/players/'+ playerIdq.player_id +'/relationships/sessions'
 		r = requests.get(url).json()
 		player_list = {
 			'last_online': r["data"][0]["attributes"]["stop"],
@@ -86,11 +80,11 @@ def index(request):
 
 
 
-	steamids = SteamId.objects.all()
+	steamids = UsersId.objects.all()
 	playerSteamidList = []
 	for playersid in steamids:
 
-		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=948ADFC5AA39BFA48B536A316B0A333E&steamids='+ str(playersid)
+		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ str(playersid)
 		r = requests.get(url).json()
 
 		try:

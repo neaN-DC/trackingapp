@@ -96,25 +96,24 @@
     <div class = "container" id = "load" >
       <h3 class="main" >
 
-        {% for players in playerSteamidList %}
-          {{ players.playernameapi }}
-          {{ players.playerGame }}
-
-        {% endfor %}      
-
-        {% for player in playersList %}
+        {% for player in myList %}
           <br>
           {% if player.last_online == None %}
             <div class = 'color'>
               <div>Player: {{ player.playernameapi }}</div>
-              <div>Name Given: {{ player.username }}</div>
-
               <div>Status: Online</div>
+              {% if player.steamonlinestatus == 0 %}
+                <div>Steam status: offline</div>
+              {% else %}
+                <div>Steam status: online</div>
+              {% endif %}
+              <div>{{ player.playerGame }}</div>
             </div>
           {% else %}
             <div>
               <div>Player: {{ player.playernameapi }}</div>
-              <div>Name Given: {{ player.username }}</div>
+              <div>{{ player.steamonlinestatus }}</div>
+              <div>{{ player.playerGame }}</div>
               <div>Status: Offline</div>
             </div>
           {% endif %}

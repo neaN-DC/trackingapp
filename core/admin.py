@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import UsersIds	
-from .models import SteamId
+from .models import UsersId	
+
 
 
 # Register your models here.
-admin.site.register(UsersIds)
-admin.site.register(SteamId)
+admin.site.register(UsersId)
