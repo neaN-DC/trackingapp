@@ -78,12 +78,10 @@
       function myFunction() {
           $('#load').load(document.URL +  " #load");
       }
-
       var i = setInterval(function() { myFunction(); }, 60000);
-
-
     </script>
-    
+
+
 </head>
 <body>
   <nav>
@@ -98,9 +96,17 @@
     <div class="main" >
 
       {% for player in playerList %}
+        <script type="text/javascript">
+          
+          var steam_game_status = "{{player.player_game_status}}";
+          var current_server = "{{ player.current_server_result }}";
+          if (steam_game_status != "Not Playing" || current_server != "Not online") {
+            alert("Player is Online: {{ player.players_name_given }}")
+          }
+          
+        </script>
       <br>
         {% if player.current_server_result == "Not online" %}
-
         <div>
             <div>Battlemetrics Name: {{ player.current_player }}</div>
             {% if player.profile_status == 1 %}
@@ -108,10 +114,9 @@
             {% else %}
               {% if player.player_steam_status != "Offline" %}
                 <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
-                <div style="color: blue;">Steam game status: {{ player.player_game_status }} </div>
+                <div style="color: blue;" >Steam game status: {{ player.player_game_status }} </div>
               {% else %}
                 <div>Steam status: {{ player.player_steam_status }}</div>
-                
               {% endif %}
             {% endif %}
             <div>Name Given: {{ player.players_name_given }}</div>
