@@ -53,6 +53,7 @@ def home(request):
 			playerSteam_list = {
 				'player_steam_status': online_status(player_steam_status),
 				'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
+				'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,
@@ -62,6 +63,7 @@ def home(request):
 			playerSteam_list = {
 				'player_steam_status': online_status(player_steam_status),
 				'player_game_status':  "Not Playing", 
+				'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,

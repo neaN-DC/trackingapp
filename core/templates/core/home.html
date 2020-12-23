@@ -103,26 +103,35 @@
 
         <div>
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status != "Offline" %}
-              <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+            {% if player.profile_status == 1 %}
+              <div style="color: red;">Steam Profile: Private Profile</div>
             {% else %}
-              <div>Steam status: {{ player.player_steam_status }}</div>
+              {% if player.player_steam_status != "Offline" %}
+                <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+                <div style="color: blue;">Steam game status: {{ player.player_game_status }} </div>
+              {% else %}
+                <div>Steam status: {{ player.player_steam_status }}</div>
+                
+              {% endif %}
             {% endif %}
-            <div>Steam game status: {{ player.player_game_status }} </div>
             <div>Name Given: {{ player.players_name_given }}</div>
             <div> Last seen: {{ player.last_seen_result }}</div>
             <div>Current server: {{ player.current_server_result }}</div>
         </div>
         {% else %}
-
           <div class = 'color' id = "playerOnline">
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status != "Offline" %}
-              <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+            {% if player.profile_status == 1 %}
+              <div style="color: red;">Steam Profile: Private Profile</div>
             {% else %}
-              <div>Steam status: {{ player.player_steam_status }}</div>
+              {% if player.player_steam_status != "Offline" %}
+                <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+                <div style="color: blue;">Steam game status: {{ player.player_game_status }} </div>
+              {% else %}
+                <div>Steam status: {{ player.player_steam_status }}</div>
+
+              {% endif %}
             {% endif %}
-            <div>Steam game status: {{ player.player_game_status }} </div>
             <div> Name Given: {{ player.players_name_given }}</div>
             <div> Last seen: {{ player.last_seen_result }}</div>
             <div>Current server: {{ player.current_server_result }}</div>
