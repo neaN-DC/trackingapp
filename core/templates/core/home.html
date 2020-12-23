@@ -100,14 +100,13 @@
       {% for player in playerList %}
       <br>
         {% if player.current_server_result == "Not online" %}
+          
         <div>
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status == "Private Profile" %}
-              <div>Steam status: {{ player.player_steam_status }}</div>
-            {% elif player.player_steam_status == 0 %}
-              <div>Steam status: Offline</div>
+            {% if player.player_steam_status == "Online" %}
+              <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
             {% else %}
-              <div>Steam status: online</div>
+              <div>Steam status: {{ player.player_steam_status }}</div>
             {% endif %}
             <div>Steam game status: {{ player.player_game_status }} </div>
             <div>Name Given: {{ player.players_name_given }}</div>
@@ -118,12 +117,10 @@
 
           <div class = 'color' id = "playerOnline">
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status == "Private Profile" %}
-              <div>Steam status: {{ player.player_steam_status }}</div>
-            {% elif player.player_steam_status == 0 %}
-              <div>Steam status: Offline</div>
+            {% if player.player_steam_status == "Online" %}
+              <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
             {% else %}
-              <div>Steam status: online</div>
+              <div>Steam status: {{ player.player_steam_status }}</div>
             {% endif %}
             <div>Steam game status: {{ player.player_game_status }} </div>
             <div> Name Given: {{ player.players_name_given }}</div>

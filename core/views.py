@@ -36,9 +36,10 @@ def home(request):
 		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
+		player_steam_status = r["response"]["players"][0]["personastate"]
 		try:
 			playerSteam_list = {
-				'player_steam_status': r["response"]["players"][0]["personastate"],
+				'player_steam_status': "Offline" if player_steam_status == 0 else "Online",
 				'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
@@ -47,15 +48,18 @@ def home(request):
 			}
 		except:
 			playerSteam_list = {
-				'player_steam_status': "Private Profile",
-				'player_game_status': "Not Playing", 
+				'player_steam_status': "Offline" if player_steam_status == 0 else "Online",
+				'player_game_status':  "Not Playing", 
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,
 	            'players_name_given': playerId.players_name_given,
 			}
-		print(playerSteam_list)
+		print (playerSteam_list)
+
+
 		playerList.append(playerSteam_list)
+
 
 
 	return render(request, 'core/home.html', {'playerList': playerList})
