@@ -26,7 +26,19 @@ def home(request):
 	playerIds = UsersId.objects.all()
 	playerList = []
 
-
+	def online_status(player_steam_status):
+		if player_steam_status == 0:
+			return "Offline"
+		elif player_steam_status == 1:
+			return "Online"
+		elif player_steam_status == 2:
+			return "Busy"
+		elif player_steam_status == 3:
+			return "Away"
+		elif player_steam_status == 4:
+			return "Snooze"
+		else:
+			return "Error could not find status"
 
 	for playerId in playerIds:
 		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
@@ -39,7 +51,7 @@ def home(request):
 		player_steam_status = r["response"]["players"][0]["personastate"]
 		try:
 			playerSteam_list = {
-				'player_steam_status': "Offline" if player_steam_status == 0 else "Online",
+				'player_steam_status': online_status(player_steam_status),
 				'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
@@ -48,7 +60,7 @@ def home(request):
 			}
 		except:
 			playerSteam_list = {
-				'player_steam_status': "Offline" if player_steam_status == 0 else "Online",
+				'player_steam_status': online_status(player_steam_status),
 				'player_game_status':  "Not Playing", 
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,

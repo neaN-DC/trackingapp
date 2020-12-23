@@ -100,10 +100,10 @@
       {% for player in playerList %}
       <br>
         {% if player.current_server_result == "Not online" %}
-          
+
         <div>
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status == "Online" %}
+            {% if player.player_steam_status != "Offline" %}
               <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
             {% else %}
               <div>Steam status: {{ player.player_steam_status }}</div>
@@ -117,7 +117,7 @@
 
           <div class = 'color' id = "playerOnline">
             <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.player_steam_status == "Online" %}
+            {% if player.player_steam_status != "Offline" %}
               <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
             {% else %}
               <div>Steam status: {{ player.player_steam_status }}</div>
