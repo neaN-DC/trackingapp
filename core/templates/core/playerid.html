@@ -1,132 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tracking App</title>
-	<style>
-		input[type='text'] {
-            width: 30%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 2px solid black;
-        }
+{% extends "core/base.html" %}
 
-        input[type='submit'] {
-            width: 30%;
-            padding: 5px;
-            background: black;
-            color: white;
-            text-transform: uppercase;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        * {
-            margin: 0;
-            box-sizing: border-box;
-            font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
-        }
+{% block content %}
+      <form method = 'POST'>
+          {% csrf_token %}
+          <div class = "field_wrap">
+            <label for="players_name_given">Player name:</label>
+            {{ form.players_name_given }}
+          </div>
 
-        .main {
-            width:1000px;
-        }
-        nav{
-          display:flex;
-          border-bottom: solid 2px rgb(242 242 242);
-          border-spacing: 10px;
-          width:100%;
-          height:100px;
-          justify-content: space-between;
-        }
-        body{
-          display:flex;
-          flex-direction: column;
-          align-items: center;
-          overflow-x: hidden;
-        }
-        .nav-links{
-          display:flex;
-          align-items: center;
-        }
-        .signin {
-          color: #ffffff;
-          font-size: 15px;
-          line-height: 18px;
-          font-weight: 400;
-          letter-spacing: 0.4px;
-          text-decoration: none;
-          border-radius: 26px;
-          background: black;
-          padding:7px;
-          padding-left:23px;
-          padding-right:23px;
-          display:flex;
-          margin-right: 150px;
-          border-style: none;
+          <div class = "field_wrap">
+            <label for="player_id">Battlemetric ID:</label>
+            {{ form.player_id }}
+          </div>
 
-        }
-        li{
-          list-style: none;
-        }
-        .logo {
-          width: 152.47px;
-          height: 140px;
-          margin-left:50px;
-          margin-bottom: 20px;
-          padding-top:30px;
-          text-decoration: none;
-        }
+          <div class = "field_wrap">
+            <label for="playersteam_id">Steam ID:</label>
+            {{ form.playersteam_id }}
+          </div>
 
+          <input type="submit" value="Submit" class = "btn"/>
 
-
-
-	</style>
-
-</head>
-
-<body>
-	<nav>
-	    <h1 class = "logo"> <a href="/" class = "logo">PlayerTracker</a></h1>
-	    <ul class="nav-links">
-	        <li><a href="saveid" class='signin'>Add Player</a></li>
-	    </ul>   
-	</nav>
-	<div>
-    <div class = "container" id = "load" >
-      <h3 class="main" >
-
-        {% for player in myList %}
-          <br>
-          {% if player.last_online == None %}
-            <div class = 'color'>
-              <div>Player: {{ player.playernameapi }}</div>
-              <div>Status: Online</div>
-              {% if player.steamonlinestatus == 0 %}
-                <div>Steam status: offline</div>
-              {% else %}
-                <div>Steam status: online</div>
-              {% endif %}
-              <div>{{ player.playerGame }}</div>
-            </div>
-          {% else %}
-            <div>
-              <div>Player: {{ player.playernameapi }}</div>
-              <div>{{ player.steamonlinestatus }}</div>
-              <div>{{ player.playerGame }}</div>
-              <div>Status: Offline</div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </h3>
-    </div>
-  		<form method = 'POST'>
-  		    {% csrf_token %}
-
-  		    {{ form.as_p}}
-
-  		    <input type="submit" value="Submit"/>
-
-  		</form>		
-	</div>
-</body>
+      </form>   
+{% endblock %}  

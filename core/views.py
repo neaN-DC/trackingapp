@@ -4,8 +4,6 @@ from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
 from .models import UsersId
-
-
 from .forms import HomeForm
 
 
@@ -22,10 +20,7 @@ def get_html_content(playerId):
 
 
 def home(request):
-
-	playerIds = UsersId.objects.all()
-	playerList = []
-
+	
 	def online_status(player_steam_status):
 		if player_steam_status == 0:
 			return "Offline"
@@ -39,6 +34,9 @@ def home(request):
 			return "Snooze"
 		else:
 			return "Error could not find status"
+
+	playerIds = UsersId.objects.all()
+	playerList = []
 
 	for playerId in playerIds:
 		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
@@ -69,60 +67,13 @@ def home(request):
 	            'current_server_result' : current_server_result,
 	            'players_name_given': playerId.players_name_given,
 			}
-		print (playerSteam_list)
-
-
 		playerList.append(playerSteam_list)
 
 
 
+
+
 	return render(request, 'core/home.html', {'playerList': playerList})
-
-
-
-
-def index(request):
-
-	playerIds = UsersId.objects.all()
-	playerList = []
-	for playerIdq in playerIds:
-
-		url = 'https://api.battlemetrics.com/players/'+ playerIdq.player_id +'/relationships/sessions'
-		r = requests.get(url).json()
-		player_list = {
-			'last_online': r["data"][0]["attributes"]["stop"],
-			'playernameapi': r["data"][0]["attributes"]["name"],
-
-		}
-		playerList.append(player_list)
-
-
-
-	steamids = UsersId.objects.all()
-	playerSteamidList = []
-	for playersid in steamids:
-
-		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ str(playersid)
-		r = requests.get(url).json()
-
-		try:
-			playerSteam_list = {
-				'playernameapi': r["response"]["players"][0]["personastate"],
-				'playerGame':  r["response"]["players"][0]["gameextrainfo"], 
-			}
-		except:
-			playerSteam_list = {
-				'playernameapi': r["response"]["players"][0]["personastate"],
-				'playerGame': "Not Playing", 
-			}
-
-		playerSteamidList.append(playerSteam_list)
-
-		print (playerSteamidList)
-	
-	
-
-	return render(request, 'core/playerid.html', {'playerSteam_list': playerSteam_list, 'playersList': playerList,})
 
 
 
