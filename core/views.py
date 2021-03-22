@@ -20,7 +20,7 @@ def get_html_content(playerId):
 
 
 def home(request):
-	
+
 	def online_status(player_steam_status):
 		if player_steam_status == 0:
 			return "Offline"
@@ -56,6 +56,8 @@ def home(request):
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,
 	            'players_name_given': playerId.players_name_given,
+	            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
+	            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
 			}
 		except:
 			playerSteam_list = {
@@ -66,16 +68,14 @@ def home(request):
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,
 	            'players_name_given': playerId.players_name_given,
+	            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
+	            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
+
 			}
 		playerList.append(playerSteam_list)
 
 
-
-
-
 	return render(request, 'core/home.html', {'playerList': playerList})
-
-
 
 
 

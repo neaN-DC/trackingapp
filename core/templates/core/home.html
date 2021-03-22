@@ -1,69 +1,65 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block content %}
-    <div class="main" >
-      {% for player in playerList %}
-      <br>
-        {% if player.current_server_result == "Not online" %}
 
-        <div>
-            <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.profile_status == 1 %}
-              <div style="color: red;">Steam Profile: Private Profile</div>
-            {% else %}
-              {% if player.player_steam_status != "Offline" %}
-                <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
-                <div style="color: blue;" id = 'ingame'>Steam game status: {{ player.player_game_status }} </div>
-              {% else %}
-                <div>Steam status: {{ player.player_steam_status }}</div>
-                
-              {% endif %}
-            {% endif %}
-            <div>Name Given: {{ player.players_name_given }}</div>
-            <div> Last seen: {{ player.last_seen_result }}</div>
-            <div>Current server: {{ player.current_server_result }}</div>
-        </div>
-        {% else %}
-          <div class = 'color' id="check_if_online">
-            <div>Battlemetrics Name: {{ player.current_player }}</div>
-            {% if player.profile_status == 1 %}
-              <div style="color: red;">Steam Profile: Private Profile</div>
-            {% else %}
-              {% if player.player_steam_status != "Offline" %}
-                <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
-                <div style="color: blue;">Steam game status: {{ player.player_game_status }} </div>
-              {% else %}
-                <div>Steam status: {{ player.player_steam_status }}</div>
+      <div class = "subtitle pt-4 is-flex is-vcentered" style = "justify-content: center;"> <strong>People you are tracking</strong></div>
 
-              {% endif %}
+      <div class="mt-2 mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap" style = "justify-content: center;">
+          {% for player in playerList %}
+          <br>
+          <div class = "box ml-2" style="width:600px; height:190px; ">
+            {% if player.current_server_result == "Not online" %}
+                <div>Battlemetrics Name: <strong> {{ player.current_player }} </strong></div>
+                {% if player.profile_status == 1 %}
+                  <div style="color: red;">Steam Profile: Private Profile</div>
+                {% else %}
+                  {% if player.player_steam_status != "Offline" %}
+                    <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+                    <div style="color: blue;" id = 'ingame'>Steam game status: {{ player.player_game_status }} </div>
+                  {% else %}
+                    <div>Steam status: {{ player.player_steam_status }}</div>
+                  {% endif %}
+                {% endif %}
+                <div>Name Given: {{ player.players_name_given }}</div>
+                <div> Last seen: {{ player.last_seen_result }}</div>
+                <figure class="image is-24x24 is-pulled-right">
+                  <a href="{{player.steam_profile}}"><img src="{% static 'images/steam.png' %}" alt="steamicon"></a>
+                </figure>  
+                <figure class="image is-24x24 is-pulled-right mr-2">
+                  <a href="{{player.battlemetrics_profile}}"><img class="is-rounded" src="{% static 'images/battlemetrics.jpg' %}" alt="battlemetrics"></a>
+                </figure>
+                <div>Current server: {{ player.current_server_result }}</div>
+ 
+            {% else %}
+              <div class = 'color' id="check_if_online">
+                <div>Battlemetrics Name: <strong class = 'color'>{{ player.current_player }}</strong></div>
+                {% if player.profile_status == 1 %}
+                  <div style="color: red;">Steam Profile: Private Profile</div>
+                {% else %}
+                  {% if player.player_steam_status != "Offline" %}
+                    <div style="color: blue;">Steam status: {{ player.player_steam_status }}</div>
+                    <div style="color: blue;">Steam game status: {{ player.player_game_status }} </div>
+                  {% else %}
+                    <div>Steam status: {{ player.player_steam_status }}</div>
+
+                  {% endif %}
+                {% endif %}
+                <div> Name Given: {{ player.players_name_given }}</div>
+                <div> Last seen: {{ player.last_seen_result }}</div>
+                <figure class="image is-24x24 is-pulled-right">
+                  <a href="{{player.steam_profile}}"><img src="{% static 'images/steam.png' %}" alt="steamicon"></a>
+                </figure>  
+                <figure class="image is-24x24 is-pulled-right mr-2">
+                  <a href="{{player.battlemetrics_profile}}"><img class="is-rounded" src="{% static 'images/battlemetrics.jpg' %}" alt="battlemetrics"></a>
+                </figure>
+                <div>Current server: {{ player.current_server_result }}</div>
+              </div>
             {% endif %}
-            <div> Name Given: {{ player.players_name_given }}</div>
-            <div> Last seen: {{ player.last_seen_result }}</div>
-            <div>Current server: {{ player.current_server_result }}</div>
           </div>
-        {% endif %}
-      {% endfor %}
+          {% endfor %}
+      </div>
 
-    </div>
-  </div>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    const my_list = document.querySelector('.main');
-
-
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(record => {
-        console.log(record);
-        if (record.addedNodes.length === 1 && record.addedNodes[0].nodeType === Node.TEXT_NODE) {
-          alert('Change')
-        }
-
-      })
-    });
-
-    observer.observe(my_list, {
-      childList: true
-    });
-
-  </script>
 {% endblock %}
 
