@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<br>
+<div class = "is-flex pb-5" style= "justify-content: center;">
+  	<div class = "box" style= "width:600px;">
+		<legend class = "subtitle is-flex " style= "justify-content: center;">Join Today</legend>
+		<form method = "POST">
+			{% csrf_token %}
+	        <div class = "field">
+	          <label for="players_name_given" class = label>Username:</label>
+	          <div class = "control">
+	            {{ form.username }}
+	          </div>
+	        </div>
+
+	        <div class = "field_wrap">
+	          <label for="player_id" class = "label">Email:</label>
+	          {{ form.email }}
+	        </div>
+
+	        <div class = "field_wrap">
+	          <label for="playersteam_id" class = "label">Password:</label>
+	          {{ form.password1 }}
+	        </div>
+	        <div class = "field_wrap">
+	          <label for="playersteam_id" class = "label">Repeat Password:</label>
+	          {{ form.password2 }}
+	        </div>
+	        <button type="submit" class = "button mt-4 is-link"/>Sign Up</button>
+
+
+
+		</form>
+		<div class = "border-top pt-3">
+			<small class = "has-text-weight-semibold">
+				Already have an Account?<a class ="ml-1" href="/login">Sign In</a>
+			</small>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
