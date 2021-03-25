@@ -5,22 +5,21 @@ import requests
 from bs4 import BeautifulSoup
 from .models import UsersId
 from .forms import HomeForm
+import lxml
+
+import concurrent.futures
 
 
 def get_html_content(playerId):
-	USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+	USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
 	LANGUAGE = "en-US,en;q=0.5"
 	session = requests.Session()
 	session.headers['User-Agent'] = USER_AGENT
 	session.headers['Accept-Language'] = LANGUAGE
 	session.headers['Content-Language'] = LANGUAGE
-
 	return session.get('https://www.battlemetrics.com/players/'+ str(playerId.player_id))
 
-
-
 def home(request):
-
 	def online_status(player_steam_status):
 		if player_steam_status == 0:
 			return "Offline"
@@ -35,6 +34,7 @@ def home(request):
 		else:
 			return "Error could not find status"
 
+			
 	playerIds = UsersId.objects.all()
 	playerList = []
 
@@ -42,7 +42,7 @@ def home(request):
 		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
 		r = requests.get(url).json()
 		html_content = get_html_content(playerId)
-		soup = BeautifulSoup(html_content.text, 'html.parser')
+		soup = BeautifulSoup(html_content.text, 'lxml')
 		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
@@ -73,8 +73,6 @@ def home(request):
 
 			}
 		playerList.append(playerSteam_list)
-
-
 	return render(request, 'core/home.html', {'playerList': playerList})
 
 
