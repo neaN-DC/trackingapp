@@ -46,33 +46,48 @@ def home(request):
 		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
-		player_steam_status = r["response"]["players"][0]["personastate"]
+		print(r)
 		try:
-			playerSteam_list = {
-				'player_steam_status': online_status(player_steam_status),
-				'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
-				'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
-				'current_player' : current_player,
-	            'last_seen_result' : last_seen_result,
-	            'current_server_result' : current_server_result,
-	            'players_name_given': playerId.players_name_given,
-	            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
-	            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
-			}
+			player_steam_status = r["response"]["players"][0]["personastate"]
+			try:
+				playerSteam_list = {
+					'player_steam_status': online_status(player_steam_status),
+					'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
+					'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
+					'current_player' : current_player,
+		            'last_seen_result' : last_seen_result,
+		            'current_server_result' : current_server_result,
+		            'players_name_given': playerId.players_name_given,
+		            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
+		            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
+				}
+			except:
+				playerSteam_list = {
+					'player_steam_status': online_status(player_steam_status),
+					'player_game_status':  "Not Playing", 
+					'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
+					'current_player' : current_player,
+		            'last_seen_result' : last_seen_result,
+		            'current_server_result' : current_server_result,
+		            'players_name_given': playerId.players_name_given,
+		            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
+		            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
+				}
+			playerList.append(playerSteam_list)
 		except:
 			playerSteam_list = {
-				'player_steam_status': online_status(player_steam_status),
-				'player_game_status':  "Not Playing", 
-				'profile_status':  r["response"]["players"][0]["communityvisibilitystate"],
+				'player_steam_status': "Player not Found on Steam",
+				'player_game_status':  "Player not Found on Steam", 
+				'profile_status':  "Player not Found on Steam",
 				'current_player' : current_player,
 	            'last_seen_result' : last_seen_result,
 	            'current_server_result' : current_server_result,
 	            'players_name_given': playerId.players_name_given,
 	            'steam_profile': 'https://steamcommunity.com/profiles/'+ playerId.playersteam_id,
 	            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
-
 			}
-		playerList.append(playerSteam_list)
+			playerList.append(playerSteam_list)
+
 	return render(request, 'core/home.html', {'playerList': playerList})
 
 
@@ -83,8 +98,11 @@ def save_player_id(request):
 	if form.is_valid():
 		form.save()
 		form = HomeForm()
+
 		
 	context = { 'form': form }
 	return render (request, 'core/playerid.html', context)
+
+
 
 

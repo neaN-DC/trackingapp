@@ -2,24 +2,37 @@
 
 {% block content %}
 
-	<div class="content-section">
-	  <div class="media">
-	    <div class="media-body">
-	      <h2 class="account-heading">{{ user.username }}</h2>
-	      <p class="text-secondary">{{ user.email }}</p>
-	    </div>
-	  </div>
-	  	<form method = "POST" enctype="multipart/form-data">
+
+
+<br>
+<div class = "is-flex pb-5" style= "justify-content: center;">
+  	<div class = "box" style= "width:600px;">
+		<legend class = "subtitle is-flex " style= "justify-content: center;">Profile</legend>
+		<form method = "POST">
 			{% csrf_token %}
-			<fieldset class = "form-group">
-				<legend class = "border-bottom mb-4">Profile Information</legend>
+	        <div class = "field_wrap">
+	          <div class = "control">
+	            <h2 class="account-heading"><strong>Username: </strong> {{ user.username }}</h2>
+	          </div>
+	        </div>
+	        <div class = "field_wrap">
+	          <h2 class="account-heading"><strong>Email: </strong> {{ user.email }}</h2>
+	        </div>
+	        <br>
+	        <h1 class = "subtitle mb-1">
+	        	Update your information Here
+	        </h1>
+	        <div class = "field_wrap">
 				{{ u_form }}
-				
-			</fieldset>
-			<div class = "form-group">
-				<button class = "btn btn-outline-info" type = "submit">Update</button>
-			</div>
+	        </div>
+
+	        <button type="submit" class = "button mt-4 is-link"/>Update</button>
+
+
+
 		</form>
+
 	</div>
+</div>
 
 {% endblock content %}
