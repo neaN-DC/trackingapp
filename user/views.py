@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, UserUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, userlistForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -34,3 +34,18 @@ def profile(request):
 	}
 	return render(request, 'user/profile.html', context)
 
+def userlist(request):
+
+	form = userlistForm(request.POST)
+
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.user = request.user
+		instance.save()
+		form = userlistForm()
+	else:
+		print("error")
+
+		
+	context = { 'form': form }
+	return render (request, 'user/userlist.html', context)

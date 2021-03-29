@@ -18,3 +18,12 @@ class Profile(models.Model):
 
 			
 
+class UserslistId(models.Model):
+	auto_increment_id = models.AutoField(primary_key=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	players_name_given = models.CharField(max_length=50, unique=True)
+	player_id = models.CharField(max_length=50,unique=True)
+	playersteam_id = models.CharField(max_length=50, unique=True)
+
+	def __str__(self):
+		return self.players_name_given

@@ -4,6 +4,7 @@ from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
 from .models import UsersId
+from user.models import UserslistId
 from .forms import HomeForm
 import lxml
 
@@ -34,8 +35,11 @@ def home(request):
 		else:
 			return "Error could not find status"
 
-			
-	playerIds = UsersId.objects.all()
+	if request.user.is_authenticated:
+		playerIds = UserslistId.objects.filter(user_id = request.user.id)
+	else:
+		playerIds = UsersId.objects.all()
+
 	playerList = []
 
 	for playerId in playerIds:
@@ -46,7 +50,6 @@ def home(request):
 		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
-		print(r)
 		try:
 			player_steam_status = r["response"]["players"][0]["personastate"]
 			try:
@@ -93,6 +96,7 @@ def home(request):
 
 
 def save_player_id(request):
+
 	form = HomeForm(request.POST)
 
 	if form.is_valid():

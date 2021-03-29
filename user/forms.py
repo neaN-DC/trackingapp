@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+from .models import UserslistId
+
 
 class UserRegisterForm(UserCreationForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'class': 'input is-small'}))
@@ -25,3 +27,16 @@ class UserUpdateForm(forms.ModelForm):
 
 
 
+class userlistForm(forms.ModelForm):
+
+
+	class Meta:
+		model = UserslistId
+		fields = ['players_name_given','player_id', 'playersteam_id', ]
+
+
+		widgets = {
+			'players_name_given': forms.TextInput(attrs={'class': 'input is-small'}),
+			'player_id': forms.TextInput(attrs={'class': 'input is-small'}),
+			'playersteam_id': forms.TextInput(attrs={'class': 'input is-small'}),
+		}

@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+
+	<h1>User list</h1>
+
+    <form method = 'POST'>
+        {% csrf_token %}
+
+        <div class = "field">
+          <label for="players_name_given" class = label>Player name:</label>
+          <div class = "control">
+            {{ form.players_name_given }}
+          </div>
+        </div>
+
+        <div class = "field_wrap">
+          <label for="player_id" class = "label">Battlemetric ID:</label>
+          {{ form.player_id }}
+        </div>
+
+        <div class = "field_wrap">
+          <label for="playersteam_id" class = "label">Steam ID:</label>
+          {{ form.playersteam_id }}
+        </div>
+        <button type="submit" class = "button mt-4 is-link"/>Submit</button>
+    </form>  
+
+{% endblock content %}
+
+
+
