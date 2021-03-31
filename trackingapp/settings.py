@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'core',
     'user.apps.UserConfig',
     'django.contrib.sites',
+    'redis',
 
 ]
 SITE_ID = 1
@@ -130,3 +131,5 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+
+

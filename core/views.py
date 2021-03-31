@@ -7,20 +7,29 @@ from .models import UsersId
 from user.models import UserslistId
 from .forms import HomeForm
 import lxml
+from django.conf import settings
 
-import concurrent.futures
 
 
-def get_html_content(playerId):
-	USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
-	LANGUAGE = "en-US,en;q=0.5"
-	session = requests.Session()
-	session.headers['User-Agent'] = USER_AGENT
-	session.headers['Accept-Language'] = LANGUAGE
-	session.headers['Content-Language'] = LANGUAGE
-	return session.get('https://www.battlemetrics.com/players/'+ str(playerId.player_id))
 
 def home(request):
+
+	def get_html_content(playerId):
+		USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
+		LANGUAGE = "en-US,en;q=0.5"
+		session = requests.Session()
+		session.headers['User-Agent'] = USER_AGENT
+		session.headers['Accept-Language'] = LANGUAGE
+		session.headers['Content-Language'] = LANGUAGE
+		return session.get('https://www.battlemetrics.com/players/'+ str(playerId.player_id))
+
+	def getsteamapi(playerId):
+		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
+		session = requests.Session()
+
+		return session.get(url).json()
+
+
 	def online_status(player_steam_status):
 		if player_steam_status == 0:
 			return "Offline"
@@ -43,13 +52,20 @@ def home(request):
 	playerList = []
 
 	for playerId in playerIds:
-		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
-		r = requests.get(url).json()
+		r = getsteamapi(playerId)
 		html_content = get_html_content(playerId)
 		soup = BeautifulSoup(html_content.text, 'lxml')
-		current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
-		last_seen_result = soup.find('dd').next_sibling.next_sibling.text
-		current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
+
+		#checking to see if player exists on battlemetrics
+		try:
+			current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
+			last_seen_result = soup.find('dd').next_sibling.next_sibling.text
+			current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
+		except:
+			current_player = "Not Found"
+			last_seen_result = "Not Found"
+			current_server_result = "Not found"
+		#checking to see if player exists on steam
 		try:
 			player_steam_status = r["response"]["players"][0]["personastate"]
 			try:
