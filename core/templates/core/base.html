@@ -9,12 +9,6 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <script>
-      function myFunction() {
-          $('#load').load(document.URL +  " #load");
-      }
-      var i = setInterval(function() { myFunction(); }, 60000);
-    </script>
     <style> 
       .color {
           color:green;
@@ -23,29 +17,53 @@
 </head>
 <body>
   <div class = "container">
+
+
     <nav class="navbar" role="navigation" aria-label="main navigation">
+
       <div class="navbar-brand">
         <a class="navbar-item is-size-4" href="/">
           <strong>PlayerTracker</strong>
         </a>
+
+        
       </div>
 
       <div class="navbar-menu">
-        <div class="navbar-end">
-            <a href="saveid" class='navbar-item'>
-              Add Player
-            </a>
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-info">
-                <strong>Sign up</strong>
+        {% if user.is_authenticated %}
+          <div class="navbar-end">
+              <a href="/userlist" class='navbar-item'>
+                Add Player
               </a>
-              <a class="button is-light">
-                Log in
+              <a href="/profile" class='navbar-item'>
+                Profile
               </a>
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-info" href="/logout">
+                  <strong>Logout</strong>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        {% else %}
+          <div class="navbar-end">
+
+              <a href="/" class='navbar-item'>
+                Home
+              </a>
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-info" href="/register">
+                  <strong>Sign up</strong>
+                </a>
+                <a class="button is-light" href="/login">
+                  Log in
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </nav>
   </div>
@@ -60,5 +78,7 @@
 
     </div>
   </div>
+
+
 </body>
 </html>
