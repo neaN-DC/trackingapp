@@ -8,9 +8,7 @@ from user.models import UserslistId
 from .forms import HomeForm
 import lxml
 from django.conf import settings
-
-
-
+import cchardet
 
 def home(request):
 
@@ -22,6 +20,7 @@ def home(request):
 		session.headers['Accept-Language'] = LANGUAGE
 		session.headers['Content-Language'] = LANGUAGE
 		return session.get('https://www.battlemetrics.com/players/'+ str(playerId.player_id))
+
 
 	def getsteamapi(playerId):
 		url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=302232255A2C92632150EBB5B75918B3&steamids='+ playerId.playersteam_id
@@ -56,19 +55,22 @@ def home(request):
 		html_content = get_html_content(playerId)
 		soup = BeautifulSoup(html_content.text, 'lxml')
 
-		#checking to see if player exists on battlemetrics
 		try:
+			#Player exists on battlemetrics
 			current_player = soup.find("h3", attrs={"class": "css-8uhtka"}).text
 			last_seen_result = soup.find('dd').next_sibling.next_sibling.text
 			current_server_result = soup.find('dt').next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.text
 		except:
+			#Player does not exist on battlemetrics
 			current_player = "Not Found"
 			last_seen_result = "Not Found"
 			current_server_result = "Not found"
-		#checking to see if player exists on steam
+
 		try:
+			#Player exists on steam
 			player_steam_status = r["response"]["players"][0]["personastate"]
 			try:
+				#Both exist and is playing a game on steam
 				playerSteam_list = {
 					'player_steam_status': online_status(player_steam_status),
 					'player_game_status':  r["response"]["players"][0]["gameextrainfo"], 
@@ -81,6 +83,7 @@ def home(request):
 		            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
 				}
 			except:
+				#Both exist but is not playing a game on steam
 				playerSteam_list = {
 					'player_steam_status': online_status(player_steam_status),
 					'player_game_status':  "Not Playing", 
@@ -94,6 +97,7 @@ def home(request):
 				}
 			playerList.append(playerSteam_list)
 		except:
+			#Does not exist on steam
 			playerSteam_list = {
 				'player_steam_status': "Player not Found on Steam",
 				'player_game_status':  "Player not Found on Steam", 
@@ -106,20 +110,20 @@ def home(request):
 	            'battlemetrics_profile': 'https://www.battlemetrics.com/players/'+ playerId.player_id,
 			}
 			playerList.append(playerSteam_list)
-
+			print (playerList)
 	return render(request, 'core/home.html', {'playerList': playerList})
 
 
 
 def save_player_id(request):
-
 	form = HomeForm(request.POST)
+	if request.user.is_superuser:
+		if form.is_valid():
+			form.save()
+			form = HomeForm()
+	else:
+		print("not allowed")
 
-	if form.is_valid():
-		form.save()
-		form = HomeForm()
-
-		
 	context = { 'form': form }
 	return render (request, 'core/playerid.html', context)
 
